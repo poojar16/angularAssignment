@@ -1,0 +1,109 @@
+<div class="row">
+  <div class="col-lg-12 col-sm-12 col-md-12 col-12 my-5">
+    <div class="card">
+      <div class="card-body bg">
+        <div class="card-header">
+          <h2 class="card-title">Table Using Angular Material</h2>
+          <p class="card-subtitle mb-2 text-muted">Filter and Sort</p>
+        </div>
+
+        <mat-form-field>
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Search Name" #input>
+        </mat-form-field>
+<!-- matSort use for sorting table icon -->
+        <table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z5">
+          <ng-container matColumnDef="No.">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+            <td mat-cell *matCellDef="let element"> {{element?.id}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let element"> {{element?.name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="username">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> User Name </th>
+            <td mat-cell *matCellDef="let element"> {{element?.username}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+            <td mat-cell *matCellDef="let element"> {{element?.email}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="address">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Address </th>
+            <td mat-cell *matCellDef="let element"> {{element?.address?.street}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
+            <td mat-cell *matCellDef="let element"> {{element?.phone}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-12 col-sm-12 col-md-12 col-12">
+    <div class="card">
+      <div class="card-body bg">
+        <div class="card-header">
+          <h2 class="card-title">Products Table</h2>
+          <p class="card-subtitle mb-2 text-muted">Filter and Sort</p>
+        </div>
+    <form>
+      <div class="mb-3 row">
+        <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label">Search:</label>
+        <div class="col-xs-3 col-sm-auto">
+          <input id="table-filtering-search" class="form-control" type="text" [(ngModel)]="titlee"
+            (ngModelChange)="search()" [ngModelOptions]="{standalone: true}" placeholder="Search Title" />
+        </div>
+      </div>
+    </form>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col"><mat-icon style="padding-top: 2%;" (click)="sortt('image')">arrow_downward</mat-icon>Image</th>
+          <th scope="col" style="width: 20%;"><mat-icon style="padding-top: 2%;" (click)="sortt('title')">arrow_downward</mat-icon>Title</th>
+          <th scope="col"><mat-icon style="padding-top: 2%;" (click)="sortt('category')">arrow_downward</mat-icon>Category</th>
+          <th scope="col"><mat-icon style="padding-top: 2%;" (click)="sortt('price')">arrow_downward</mat-icon> Price</th>
+          <th scope="col"><mat-icon style="padding-top: 2%;" (click)="sortt('rating')">arrow_downward</mat-icon>  Rating</th>
+          <th scope="col"><mat-icon style="padding-top: 1%;" (click)="sortt('description')">arrow_downward</mat-icon>  Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of tableData; index as i">
+          <th scope="row">{{ i + 1 }}</th>
+          <td> <img [src]="data?.image" style="width: 100px; height: 100px;" /> </td>
+          <td><p>{{data?.title}}</p></td>
+          <td>{{data?.category}}</td>
+          <td>{{data?.price}}</td>
+          <td class="star">{{data?.rating?.rate + '&#8902;'}}</td>
+          <td>
+            <!--  using ngIf when false then slice else all description -->
+            <ng-container *ngIf="!isExpanded">
+              <td [innerHTML]="data?.description | slice:0:30"></td>
+              <td><button (click)="toggleDescription()" style="border: none;color: green;">Read More</button></td>
+            </ng-container>
+            <ng-container *ngIf="isExpanded">
+              <td [innerHTML]="data?.description"></td>
+              <td><button (click)="toggleDescription()" style="border: none;color: red;">Read Less</button></td>
+            </ng-container>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
